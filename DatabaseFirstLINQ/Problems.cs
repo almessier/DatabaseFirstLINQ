@@ -141,8 +141,19 @@ namespace DatabaseFirstLINQ
 
         private void ProblemTen()
         {
-            // Write a LINQ query that retreives all of the products in the shopping cart of users who have the role of "Employee".
+            // Write a LINQ query that retreives all of the products in the shopping cart of users who have the role of "Employee"/2.
             // Then print the user's email as well as the product's name, price, and quantity to the console.
+            // Tables needed: Shopping Cart: UserId & ProductId | UserRoles: UserId & RoleId
+            var employeeUsers = _context.UserRoles.Include(ur => ur.Role).Include(ur => ur.User).Where(ur => ur.Role.RoleName == "Employee").Select(ur => ur.User.Email).ToList();
+            var employeeCarts = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Include(sc => sc.User.UserRoles);
+            foreach (ShoppingCart shoppingCart in employeeCarts)
+            {   
+                if (employeeUsers.Contains(shoppingCart.User.Email))
+                {
+                    Console.WriteLine($"Employee Email: {shoppingCart.User.Email} | Product: {shoppingCart.Product.Name}, Price: ${shoppingCart.Product.Price}, Qty: {shoppingCart.Quantity}");
+                }
+            }
+
 
         }
 
