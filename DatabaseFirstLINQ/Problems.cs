@@ -24,9 +24,9 @@ namespace DatabaseFirstLINQ
             //ProblemSeven();
             //ProblemEight();
             //ProblemNine();
-            ProblemTen();
+            //ProblemTen();
             //ProblemEleven();
-            //ProblemTwelve();
+            ProblemTwelve();
             //ProblemThirteen();
             //ProblemFourteen();
             //ProblemFifteen();
@@ -150,11 +150,9 @@ namespace DatabaseFirstLINQ
             {   
                 if (employeeUsers.Contains(shoppingCart.User.Email))
                 {
-                    Console.WriteLine($"Employee Email: {shoppingCart.User.Email} | Product: {shoppingCart.Product.Name}, Price: ${shoppingCart.Product.Price}, Qty: {shoppingCart.Quantity}");
+                    Console.WriteLine($"Employee Email: {shoppingCart.User.Email} | Product: {shoppingCart.Product.Name}, Price:${shoppingCart.Product.Price}, Qty: {shoppingCart.Quantity}");
                 }
             }
-
-
         }
 
         // <><><><><><><><> CUD (Create, Update, Delete) Actions <><><><><><><><><>
@@ -176,7 +174,14 @@ namespace DatabaseFirstLINQ
         private void ProblemTwelve()
         {
             // Create a new Product object and add that product to the Products table using LINQ.
-
+            Product newProduct = new Product()
+            {
+                Name = "Xbox Series X",
+                Description = "A next-generation gaming console.",
+                Price = 500m,
+            };
+            _context.Products.Add(newProduct);
+            _context.SaveChanges();
         }
 
         private void ProblemThirteen()
