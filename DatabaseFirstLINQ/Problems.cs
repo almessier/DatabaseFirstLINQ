@@ -313,15 +313,15 @@ namespace DatabaseFirstLINQ
         private void BonusTwo()
         {
             // Write a query that finds the total of every users shopping cart products using LINQ.
-            // Display the total of each users shopping cart as well as the total of the toals to the console.
+            // Display the total of each users shopping cart as well as the total of the totals to the console.
             
             var users = _context.Users;
             decimal combinedTotal = 0;
-            var userTotals = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).
+            //var userTotals = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).
             foreach(var user in users)
             {
                 //exception on line below
-                decimal userTotal = _context.ShoppingCarts.Include(sc => sc.Product).Where(sc => sc.UserId == user.Id).Select(sc => sc.Product.Price).Sum();
+                var userTotal = _context.ShoppingCarts.Include(sc => sc.Product).Where(sc => sc.UserId == user.Id).Select(sc => sc.Product.Price).Sum();
                 Console.WriteLine($"Email: {user.Email} Total: ${userTotal}");
                 combinedTotal += userTotal;
             }
@@ -332,13 +332,13 @@ namespace DatabaseFirstLINQ
         private void BonusThree()
         {
             // 1. Create functionality for a user to sign in via the console
-            // 2. If the user succesfully signs in
+            // 2. If the user successfully signs in
             // a. Give them a menu where they perform the following actions within the console
             // View the products in their shopping cart
             // View all products in the Products table
             // Add a product to the shopping cart (incrementing quantity if that product is already in their shopping cart)
             // Remove a product from their shopping cart
-            // 3. If the user does not succesfully sing in
+            // 3. If the user does not successfully sing in
             // a. Display "Invalid Email or Password"
             // b. Re-prompt the user for credentials
 
