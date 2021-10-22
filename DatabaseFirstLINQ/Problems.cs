@@ -111,7 +111,7 @@ namespace DatabaseFirstLINQ
 
         private void ProblemSeven()
         {
-            // Write a LINQ query that retreives all of the users who are assigned to the role of Customer.
+            // Write a LINQ query that retrieves all of the users who are assigned to the role of Customer.
             // Then print the users email and role name to the console.
             var customerUsers = _context.UserRoles.Include(ur => ur.Role).Include(ur => ur.User).Where(ur => ur.Role.RoleName == "Customer");
             foreach (UserRole userRole in customerUsers)
@@ -122,7 +122,7 @@ namespace DatabaseFirstLINQ
 
         private void ProblemEight()
         {
-            // Write a LINQ query that retreives all of the products in the shopping cart of the user who has the email "afton@gmail.com".
+            // Write a LINQ query that retrieves all of the products in the shopping cart of the user who has the email "afton@gmail.com".
             // Then print the product's name, price, and quantity to the console.
 
             //var user = _context.Users.Where(u => u.Email == "afton@gmail.com");
@@ -135,7 +135,7 @@ namespace DatabaseFirstLINQ
 
         private void ProblemNine()
         {
-            // Write a LINQ query that retreives all of the products in the shopping cart of the user who has the email "oda@gmail.com" and returns the sum of all of the products prices.
+            // Write a LINQ query that retrieves all of the products in the shopping cart of the user who has the email "oda@gmail.com" and returns the sum of all of the products prices.
             // HINT: End of query will be: .Select(sc => sc.Product.Price).Sum();
             // Then print the total of the shopping cart to the console.
             var products = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.User.Email == "oda@gmail.com").Select(sc => sc.Product.Price).Sum();
@@ -144,7 +144,7 @@ namespace DatabaseFirstLINQ
 
         private void ProblemTen()
         {
-            // Write a LINQ query that retreives all of the products in the shopping cart of users who have the role of "Employee"/2.
+            // Write a LINQ query that retrieves all of the products in the shopping cart of users who have the role of "Employee"/2.
             // Then print the user's email as well as the product's name, price, and quantity to the console.
             // Tables needed: Shopping Cart: UserId & ProductId | UserRoles: UserId & RoleId
             var employeeUsers = _context.UserRoles.Include(ur => ur.Role).Include(ur => ur.User).Where(ur => ur.Role.RoleName == "Employee").Select(ur => ur.User.Email).ToList();
@@ -313,14 +313,15 @@ namespace DatabaseFirstLINQ
         private void BonusTwo()
         {
             // Write a query that finds the total of every users shopping cart products using LINQ.
-            // Display the total of each users shopping cart as well as the total of the toals to the console.
+            // Display the total of each users shopping cart as well as the total of the totals to the console.
             
             var users = _context.Users;
             decimal combinedTotal = 0;
+            //var userTotals = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).
             foreach(var user in users)
             {
                 //exception on line below
-                decimal userTotal = _context.ShoppingCarts.Include(sc => sc.Product).Where(sc => sc.UserId == user.Id).Select(sc => sc.Product.Price).Sum();
+                var userTotal = _context.ShoppingCarts.Include(sc => sc.Product).Where(sc => sc.UserId == user.Id).Select(sc => sc.Product.Price).Sum();
                 Console.WriteLine($"Email: {user.Email} Total: ${userTotal}");
                 combinedTotal += userTotal;
             }
@@ -331,13 +332,13 @@ namespace DatabaseFirstLINQ
         private void BonusThree()
         {
             // 1. Create functionality for a user to sign in via the console
-            // 2. If the user succesfully signs in
+            // 2. If the user successfully signs in
             // a. Give them a menu where they perform the following actions within the console
             // View the products in their shopping cart
             // View all products in the Products table
             // Add a product to the shopping cart (incrementing quantity if that product is already in their shopping cart)
             // Remove a product from their shopping cart
-            // 3. If the user does not succesfully sing in
+            // 3. If the user does not successfully sing in
             // a. Display "Invalid Email or Password"
             // b. Re-prompt the user for credentials
 
