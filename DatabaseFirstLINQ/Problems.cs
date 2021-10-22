@@ -372,6 +372,9 @@ namespace DatabaseFirstLINQ
             while (!signedIn);
             
             var signedInUser = users[id];
+            var allProducts = _context.Products.ToList();
+            var productsInCart = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.UserId == signedInUser.Id).Select(sc => sc.Product).ToList();
+        
 
             if (signedIn)
             {
@@ -387,21 +390,50 @@ namespace DatabaseFirstLINQ
                 switch(menuChoice)
                 {
                     case "1":
-                        var productsInCart = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.UserId == signedInUser.Id).Select(sc => sc.Product);
                         foreach (var product in productsInCart)
                         {
                             Console.WriteLine($"Product: {product.Name} | Price: ${product.Price}");
                         }
                         break;
                     case "2":
-                        var allProducts = _context.Products;
                         Console.WriteLine("All Products available for purchase:");
                         foreach (var product in allProducts)
                         {
                             Console.WriteLine($"Product: {product.Name} | ${product.Price}");
                         }
                         break;
+                    case "3":
 
+                        foreach (var product in allProducts)
+                        {
+                            Console.WriteLine($"ID: {product.Id} | {product.Name} | ${product.Price} ");
+                        }
+                        Console.WriteLine($"Choose a product by 'ID' to add to your cart");
+                        int productId = Convert.ToInt32(Console.ReadLine());
+
+
+                        if (productsInCart.Contains(allProducts[productId - 1]))
+                        {
+                            var cart = _context.ShoppingCarts.Where(sc => sc.UserId == signedInUser.Id && sc.ProductId == productId).SingleOrDefault();
+                            //var cart = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.User.Id == signedInUser.Id && sc.Product.Id == productId).SingleOrDefault();
+
+                            cart.UserId = signedInUser.Id;
+                            cart.Quantity++;
+                            cart.ProductId = productId;
+                            _context.ShoppingCarts.Update(cart);
+                        }
+                        else
+                        {
+                            ShoppingCart newShoppingCart = new ShoppingCart()
+                            {
+                                UserId = signedInUser.Id,
+                                ProductId = productId,
+                                Quantity = 1
+                            };
+                            _context.ShoppingCarts.Add(newShoppingCart);
+                        }
+                        _context.SaveChanges();
+                        break;
                 }   
                     
             }
