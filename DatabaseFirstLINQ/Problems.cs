@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using DatabaseFirstLINQ.Models;
+using System.Collections.Generic;
 
 namespace DatabaseFirstLINQ
 {
@@ -345,6 +346,11 @@ namespace DatabaseFirstLINQ
             bool signedIn = false;
             var users = _context.Users.ToList();
             int id = 0;
+            Dictionary<string, string> validUsers = new Dictionary<string, string>();
+            foreach (var user in users)
+            {
+                validUsers.Add(user.Email, user.Password);
+            }
 
             do
             {
@@ -352,21 +358,18 @@ namespace DatabaseFirstLINQ
                 string email = Console.ReadLine();
                 Console.WriteLine("Enter password: ");
                 string password = Console.ReadLine();
-                bool validInput = false;
                 
-                for(int i = 0; i < users.Count; i++)
+                if (validUsers.ContainsKey(email) && validUsers.ContainsValue(password))
                 {
-                    if (users[i].Email == email && users[i].Password == password)
-                    {
-                        Console.WriteLine("Signed In!");
-                        id = i;
-                        validInput = signedIn = true;
-                    }
-                    else if (users[i].Email != email || users[i].Password != password)
-                    {
-                        Console.WriteLine("Invalid Email or Password...");
-                    }
+                    signedIn = true;
+                    Console.WriteLine("Successfully logged in!");
                 }
+                else
+                {
+                    Console.WriteLine("Invalid email or password. Please try again.");
+                }
+                
+                
             }
             while (!signedIn);
             
