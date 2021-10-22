@@ -36,8 +36,8 @@ namespace DatabaseFirstLINQ
             //ProblemNineteen();
             //ProblemTwenty();
             //BonusOne();
-            BonusTwo();
-            //BonusThree();
+            //BonusTwo();
+            BonusThree();
         }
 
         // <><><><><><><><> R Actions (Read) <><><><><><><><><>
@@ -315,17 +315,17 @@ namespace DatabaseFirstLINQ
             // Write a query that finds the total of every users shopping cart products using LINQ.
             // Display the total of each users shopping cart as well as the total of the totals to the console.
             
-            var users = _context.Users;
-            decimal combinedTotal = 0;
-            //var userTotals = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).
-            foreach(var user in users)
-            {
-                //exception on line below
-                var userTotal = _context.ShoppingCarts.Include(sc => sc.Product).Where(sc => sc.UserId == user.Id).Select(sc => sc.Product.Price).Sum();
-                Console.WriteLine($"Email: {user.Email} Total: ${userTotal}");
-                combinedTotal += userTotal;
-            }
-            Console.WriteLine($"Combined Total: ${combinedTotal}");
+        //    var users = _context.Users.ToList();
+        //    decimal combinedTotal = 0;
+        //    //var userTotal = _context.ShoppingCarts.Include(sc => sc.Product).Include(sc => sc.User).Where(sc => sc.UserId == User.Id);
+
+        //    foreach(var user in users)
+        //    {
+        //        //exception on line below
+        //        Console.WriteLine($"Email: {user.Email} Total: ${userTotal}");
+        //        combinedTotal += userTotal;
+        //    }
+        //    Console.WriteLine($"Combined Total: ${combinedTotal}");
         }
 
         // BIG ONE
@@ -341,8 +341,61 @@ namespace DatabaseFirstLINQ
             // 3. If the user does not successfully sing in
             // a. Display "Invalid Email or Password"
             // b. Re-prompt the user for credentials
+            Console.WriteLine("Welcome! Please enter your email address and password to sign in.");
+            bool signedIn = false;
+            var users = _context.Users.ToList();
+            int id = 0;
 
+            do
+            {
+                Console.WriteLine("Enter email: ");
+                string email = Console.ReadLine();
+                Console.WriteLine("Enter password: ");
+                string password = Console.ReadLine();
+                bool validInput = false;
+                
+                for(int i = 0; i < users.Count; i++)
+                {
+                    if (users[i].Email == email && users[i].Password == password)
+                    {
+                        Console.WriteLine("Signed In!");
+                        id = i;
+                        validInput = signedIn = true;
+                    }
+                    //else
+                    //{
+                    //    Console.WriteLine("Invalid Email or Password...");
+                        
+                    //}
+                }
+            }
+            while (!signedIn);
+            
+            var signedInUser = users[id];
+
+            if (signedIn)
+            {
+                Console.WriteLine($@" 
+                    Main Menu:
+                    Enter '1' to view all products in your shopping cart.
+                    Enter '2' to view all products that are available.
+                    Enter '3' to add a product to your shopping cart.
+                    Enter '4' to remove a product from your shopping cart.
+                    ");
+                string menuChoice = Console.ReadLine();
+
+                switch(menuChoice)
+                {
+                    case "1":
+                        var productsInCart = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.UserId == signedInUser.Id).Select(sc => sc.Product);
+                        foreach (var product in productsInCart)
+                        {
+                            Console.WriteLine($"Name: {product.Name} | Price: ${product.Price}");
+                        }
+                            break;
+                }
+                    
+            }
         }
-
     }
 }
