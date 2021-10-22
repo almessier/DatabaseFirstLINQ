@@ -362,11 +362,10 @@ namespace DatabaseFirstLINQ
                         id = i;
                         validInput = signedIn = true;
                     }
-                    //else
-                    //{
-                    //    Console.WriteLine("Invalid Email or Password...");
-                        
-                    //}
+                    else if (users[i].Email != email || users[i].Password != password)
+                    {
+                        Console.WriteLine("Invalid Email or Password...");
+                    }
                 }
             }
             while (!signedIn);
@@ -374,20 +373,23 @@ namespace DatabaseFirstLINQ
             var signedInUser = users[id];
             var allProducts = _context.Products.ToList();
             var productsInCart = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.UserId == signedInUser.Id).Select(sc => sc.Product).ToList();
-        
+            bool logOut = false;
 
-            if (signedIn)
+            string mainMenu = $@" 
+                Main Menu:
+                Enter '1' to view all products in your shopping cart.
+                Enter '2' to view all products that are available.
+                Enter '3' to add a product to your shopping cart.
+                Enter '4' to remove a product from your shopping cart.
+                Enter '5' to log-out and end your session.
+                ";
+
+            do
             {
-                Console.WriteLine($@" 
-                    Main Menu:
-                    Enter '1' to view all products in your shopping cart.
-                    Enter '2' to view all products that are available.
-                    Enter '3' to add a product to your shopping cart.
-                    Enter '4' to remove a product from your shopping cart.
-                    ");
+                Console.WriteLine(mainMenu);
                 string menuChoice = Console.ReadLine();
 
-                switch(menuChoice)
+                switch (menuChoice)
                 {
                     case "1":
                         foreach (var product in productsInCart)
@@ -448,8 +450,12 @@ namespace DatabaseFirstLINQ
                         }
                         _context.SaveChanges();
                         break;
-                }   
+                    case "5":
+                        logOut = true;
+                        break;
+                }
             }
+            while (!logOut);
         }
     }
 }
