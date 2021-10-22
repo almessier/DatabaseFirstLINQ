@@ -316,20 +316,6 @@ namespace DatabaseFirstLINQ
             // Write a query that finds the total of every users shopping cart products using LINQ.
             // Display the total of each users shopping cart as well as the total of the totals to the console.
             
-<<<<<<< HEAD
-            var users = _context.Users;
-            var userTotal = _context.ShoppingCarts.Include(sc => sc.Product).Include(sc => sc.User).Where(sc => sc.UserId == sc.User.Id).Select(sc => sc.Product.Price).Sum();
-            decimal combinedTotal = 0;
-            //var userTotals = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).
-            foreach(var user in users)
-            {
-                //exception on line below
-                
-                Console.WriteLine($"Email: {user.Email} Total: ${userTotal}");
-                combinedTotal += userTotal;
-            }
-            Console.WriteLine($"Combined Total: ${combinedTotal}");
-=======
         //    var users = _context.Users.ToList();
         //    decimal combinedTotal = 0;
         //    //var userTotal = _context.ShoppingCarts.Include(sc => sc.Product).Include(sc => sc.User).Where(sc => sc.UserId == User.Id);
@@ -341,7 +327,6 @@ namespace DatabaseFirstLINQ
         //        combinedTotal += userTotal;
         //    }
         //    Console.WriteLine($"Combined Total: ${combinedTotal}");
->>>>>>> 20ef98eca4d89b97eb19330a6ff11b1ee710cb62
         }
 
         // BIG ONE
