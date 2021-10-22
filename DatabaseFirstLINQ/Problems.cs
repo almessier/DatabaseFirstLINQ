@@ -434,8 +434,21 @@ namespace DatabaseFirstLINQ
                         }
                         _context.SaveChanges();
                         break;
+                    case "4":
+                        foreach (var product in productsInCart)
+                        {
+                            Console.WriteLine($"ID: {product.Id} | {product.Name} | ${product.Price}");
+                        }
+                        Console.WriteLine($"Choose a product by 'ID' to REMOVE from your cart");
+                        int removeProduct = Convert.ToInt32(Console.ReadLine());
+                        var shoppingCartProducts = _context.ShoppingCarts.Where(sc => sc.UserId == signedInUser.Id && sc.ProductId == removeProduct);
+                        foreach (ShoppingCart userProductRelationship in shoppingCartProducts)
+                        {
+                            _context.ShoppingCarts.Remove(userProductRelationship);
+                        }
+                        _context.SaveChanges();
+                        break;
                 }   
-                    
             }
         }
     }
