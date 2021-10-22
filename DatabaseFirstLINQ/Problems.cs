@@ -390,10 +390,19 @@ namespace DatabaseFirstLINQ
                         var productsInCart = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).Where(sc => sc.UserId == signedInUser.Id).Select(sc => sc.Product);
                         foreach (var product in productsInCart)
                         {
-                            Console.WriteLine($"Name: {product.Name} | Price: ${product.Price}");
+                            Console.WriteLine($"Product: {product.Name} | Price: ${product.Price}");
                         }
-                            break;
-                }
+                        break;
+                    case "2":
+                        var allProducts = _context.Products;
+                        Console.WriteLine("All Products available for purchase:");
+                        foreach (var product in allProducts)
+                        {
+                            Console.WriteLine($"Product: {product.Name} | ${product.Price}");
+                        }
+                        break;
+
+                }   
                     
             }
         }
