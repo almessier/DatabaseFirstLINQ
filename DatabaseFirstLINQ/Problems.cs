@@ -317,7 +317,6 @@ namespace DatabaseFirstLINQ
             
             var users = _context.Users;
             decimal combinedTotal = 0;
-            var userTotals = _context.ShoppingCarts.Include(sc => sc.User).Include(sc => sc.Product).
             foreach(var user in users)
             {
                 //exception on line below
